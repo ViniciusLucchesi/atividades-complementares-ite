@@ -1,20 +1,11 @@
 # Library Importations
 import httpx
+import json
+import re
 from selectolax.parser import HTMLParser
 from dataclasses import dataclass
 from rich import print
-import json
-import re
 
-
-# Defining Models
-@dataclass
-class Activities:
-    date: dict
-    event: str
-    professor: str
-    observation: str
-    location: str
 
 @dataclass
 class Response:
@@ -22,34 +13,42 @@ class Response:
     status_code: int
 
 
-# Functions
 def get_page(client, url) -> Response:
     headers = {"User-Agent": "https://portal.ite.edu.br/atividadescomplementares/atividadesdisponiveis"}
     resp = client.get(url, headers=headers)
     html = HTMLParser(resp.text)
     return Response(body_html=html, status_code=resp.status_code)
 
+def match_regex(observation):
+    match = re.search(r"[0-9]{1}: [0-9]{1,2}", observation)
+    if match:
+        resp_group, resp_hours = match.group().split(':')
+        hours = int(re.search(r"[0-9]{1,}", resp_hours).group())
+        group = int(re.search(r"[0-9]{1,}", resp_group).group())
+        return hours, group
+    return 0, 0
+
 def parse_activities(html) -> list:
-    table = html.css_first("table#dtBasicExample > tbody")
-    
-    headers = ['date', 'theme', 'event', 'professor', 'observation', 'time', 'location']    
-    pattern = r"Grupo [0-9]{1}: [0-9]{1,2}h"
+    table = html.css_first("table#dtBasicExample > tbody")        
 
+    # [   0   ,   1    ,   2   ,      3     ,       4      ,   5   ,     6     ]
+    # ['date', 'theme', 'event', 'professor', 'observation', 'hour', 'location']
     data = []
-    for row in table.css('tr'):        
+    for row in table.css('tr'):
         row_data = [cell.text().strip() for cell in row.css('td')]
-        row_dict = dict(zip(headers, row_data))
-
-        match = re.search(pattern, row_dict['observation'])
-        if match:            
-            group, hours = match.group().split(':')
-            row_dict['hours'] = re.search(r"[0-9]{1,}", hours).group()
-            row_dict['group'] = re.search(r"[0-9]{1,}", group).group()
-        
-        
-        data.append(row_dict)
+        hours, group = match_regex(row_data[4])
+        data_dict = {
+            "date": " ".join([row_data[0], row_data[5]]),
+            "event": row_data[2],
+            "professor": row_data[3],
+            "observation": row_data[4],
+            "location": row_data[6],
+            "hours": hours,
+            "group": group
+        }        
+        data.append(data_dict)
     return data
-    
+
 
 def main():
     client = httpx.Client()
