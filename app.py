@@ -14,25 +14,42 @@ class Response:
 
 
 def get_page(client, url) -> Response:
+    """
+    Retorna a classe "Response", contendo o HTML da página buscada 
+    e o status da página para controle de erros.
+    """
     headers = {"User-Agent": "https://portal.ite.edu.br/atividadescomplementares/atividadesdisponiveis"}
     resp = client.get(url, headers=headers)
     html = HTMLParser(resp.text)
     return Response(body_html=html, status_code=resp.status_code)
 
-def match_regex(observation):
+def match_regex(observation)-> tuple:
+    """
+    Encontra e devolve em formato de tuplas o número do grupo e a quantidade de horas
+    que serão contabilizadas com a atividade atual.
+    """
     match = re.search(r"[0-9]{1}: [0-9]{1,2}", observation)
     if match:
         resp_group, resp_hours = match.group().split(':')
         hours = int(re.search(r"[0-9]{1,}", resp_hours).group())
         group = int(re.search(r"[0-9]{1,}", resp_group).group())
-        return hours, group
-    return 0, 0
+        return (hours, group)
+    return (0, 0)
 
 def parse_activities(html) -> list:
-    table = html.css_first("table#dtBasicExample > tbody")        
+    """
+    É uma função responsável por montar uma lista de JSONs com os dados
+    coletados via scraping.
 
-    # [   0   ,   1    ,   2   ,      3     ,       4      ,   5   ,     6     ]
-    # ['date', 'theme', 'event', 'professor', 'observation', 'hour', 'location']
+    ---
+    O que é retornado na variável "row_data":
+    \t['date', 'theme', 'event', 'professor', 'observation', 'hour', 'location']\n
+    \t[   0   ,   1    ,   2   ,      3     ,       4      ,   5   ,     6     ]
+
+    ---
+    Retorna uma lista com vários dicionários
+    """
+    table = html.css_first("table#dtBasicExample > tbody")
     data = []
     for row in table.css('tr'):
         row_data = [cell.text().strip() for cell in row.css('td')]
@@ -45,7 +62,7 @@ def parse_activities(html) -> list:
             "location": row_data[6],
             "hours": hours,
             "group": group
-        }        
+        }
         data.append(data_dict)
     return data
 
