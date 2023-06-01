@@ -13,6 +13,7 @@ class Response:
     status_code: int
 
 
+# Scraping functions
 def get_page(client, url) -> Response:
     """
     Retorna a classe "Response", contendo o HTML da página buscada 
@@ -22,19 +23,6 @@ def get_page(client, url) -> Response:
     resp = client.get(url, headers=headers)
     html = HTMLParser(resp.text)
     return Response(body_html=html, status_code=resp.status_code)
-
-def match_regex(observation)-> tuple:
-    """
-    Encontra e devolve em formato de tuplas o número do grupo e a quantidade de horas
-    que serão contabilizadas com a atividade atual.
-    """
-    match = re.search(r"[0-9]{1}: [0-9]{1,2}", observation)
-    if match:
-        resp_group, resp_hours = match.group().split(':')
-        hours = int(re.search(r"[0-9]{1,}", resp_hours).group())
-        group = int(re.search(r"[0-9]{1,}", resp_group).group())
-        return (hours, group)
-    return (0, 0)
 
 def parse_activities(html) -> list:
     """
@@ -67,19 +55,52 @@ def parse_activities(html) -> list:
     return data
 
 
+# Util functions
+def match_regex(observation)-> tuple:
+    """
+    Encontra e devolve em formato de tuplas o número do grupo e a quantidade de horas
+    que serão contabilizadas com a atividade atual.
+    """
+    match = re.search(r"[0-9]{1}: [0-9]{1,2}", observation)
+    if match:
+        resp_group, resp_hours = match.group().split(':')
+        hours = int(re.search(r"[0-9]{1,}", resp_hours).group())
+        group = int(re.search(r"[0-9]{1,}", resp_group).group())
+        return (hours, group)
+    return (0, 0)
+
+def sort_activities(activities: list, order_by_data: dict) -> list:
+    element, reverse = order_by_data.values()
+    return sorted(activities, key=lambda obj: obj[element], reverse=reverse)
+
+def valid_response(page: Response) -> bool:
+    if page.status_code == 200:
+        return True
+    return False
+
+def error_json(page: Response) -> json:
+    error = {"Erro": "A página não foi encontrada", "code":page.status_code}
+    return json.dumps(error, ensure_ascii=False)
+    
+def success_json(activities: list, order_by: dict) -> json:
+    sorted_activitie = sort_activities(activities, order_by)
+    return json.dumps(sorted_activitie, indent=4, ensure_ascii=False)
+
+
+# Main function
 def main():
     client = httpx.Client()
     url = "https://portal.ite.edu.br/atividadescomplementares/atividadesdisponiveis"
     
     page = get_page(client, url)
-    if page.status_code == 200:
+    if valid_response(page):
+        order = {'element': 'hours', 'reverse': False}
         activities = parse_activities(page.body_html)
-        json_data = json.dumps(activities, indent=4, ensure_ascii=False)
+        json_data = success_json(activities=activities, order_by=order)
     else:
-        error = {"Erro": "A página não foi encontrada", "code":page.status_code}
-        json_data = json.dumps(error, ensure_ascii=False)
-    
+        json_data = error_json(page)
     print(json_data)
+
 
 if __name__ == '__main__':
     main()
