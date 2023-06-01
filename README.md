@@ -38,6 +38,11 @@ pip install -r requirements.txt
 
 Tendo terminado a instalação você já estará pronto para rodar o **web scraping**, com o comando abaixo:
 
+> Linux e MacOS
+> ```bash
+> python3 app.py
+> ```
+
 > Windows, Linux e MacOS
 > ```bash
 > python app.py
@@ -47,12 +52,14 @@ Tendo terminado a instalação você já estará pronto para rodar o **web scrap
 
 Este é um projeto pessoal desenvolvido para treinar a prática do **web scraping**, que consiste em coletar de maneira automatizada informações de sites na internet. 
 
-Nesse projeto foi realizada a coleta das **Atividades complementares** que estão disponíveis no site da minha faculdade, a **Instituição Toledo de Ensino - ITE**.
+Nesse projeto foi realizada a coleta das **Atividades complementares** que estão disponíveis no [site](https://portal.ite.edu.br/atividadescomplementares/atividadesdisponiveis) da minha faculdade, a **Instituição Toledo de Ensino - ITE**.
 
 # :sunglasses: Por que utilizá-la?
 
 Ao contrário do que é exibido no site, meu script:
-- Agrupa o **dia** e o **horário** melhorando a visibilidade da **data**
+- Retorna os dados no formato `JSON`
+- Remove campos repetidos da tabela
+- Agrupa campos que não precisavam estar separados
 - Permite filtros (de maneira crescente e decrescente) por:
   - Grupos
   - Horas Complementares
@@ -71,3 +78,32 @@ Com base nessa especificação do dicionário o **scraping** retornará os dados
 Você pode alterar de `hours` para `group`, permitindo que o **scraping** retorne os dados filtrando do **Grupo 1** ao **Grupo 4**.
 
 Mas também é possível alterar o valor do campo `reverse` de `False` para `True`, permitindo que o filtro seja realizado na ordem **Decrescente**, ou seja, do maior para o menor.
+
+# :hushed: Retorno do Scraping
+
+```json
+[    
+    {
+        "date": "05/08/2023 08:00",
+        "event": "Curso 5S – Housekeeping - Comportamento e base para a Melhoria Contínua e Prática da Qualidade - Botucatu/Online",
+        "professor": "Prof. Dr. Francisco José Lampkowski",
+        "observation": "Público alvo: todos os alunos FAIB e comunidade – Grupo 1: 10 horas – O curso será realizado em dois encontros: 05/08 e 
+12/08/2023",
+        "location": "Botucatu - zoom",
+        "hours": 10,
+        "group": 1
+    },
+    {
+        "date": "01/07/2023 07:00",
+        "event": "Visita Técnica: Feira de Franquias Associação Brasileira de Franquias-ABF",
+        "professor": "Prof. Dr. José Ricardo Scareli Carrijo",
+        "observation": "Público alvo: alunos do curso de Administração do CEUB - Grupo 3: 12h – Os alunos interessados devem procurar o 
+coordenador do curso de Administração Prof. Dr. José Ricardo Scareli Carrijo",
+        "location": "Presencial",
+        "hours": 12,
+        "group": 3
+    }
+]
+```
+
+Como pode ser observado o retorno desse **scraping** é em formato de `array` contendo os objetos `JSON` extraídos do `HTML` da página da faculdade.
