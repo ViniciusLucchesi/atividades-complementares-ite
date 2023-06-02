@@ -46,4 +46,4 @@ async def activities_group_asc(request):
 
 
 if __name__ == '__main__':
-    app.start(url="0.0.0.0", port=PORT)
+    app.start(url="0.0.0.0", port=5000)
