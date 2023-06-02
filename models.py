@@ -15,7 +15,6 @@ class Response:
 class Scraper:
     url = "https://portal.ite.edu.br/atividadescomplementares/atividadesdisponiveis"
     headers = {"User-Agent": "https://portal.ite.edu.br/atividadescomplementares/atividadesdisponiveis"}
-    order = { 'element': 'hours', 'reverse': True }
 
     def get_page(self, client:httpx.Client) -> Response:
         """
