@@ -10,27 +10,27 @@ Tendo baixado esse repositório rode os comandos abaixo na ordem em que estão a
 
 >Linux e MacOS
 >```bash
->python3 -m venv env
+>python3 -m venv .venv
 >```
 >
 >```bash
->source env/bin/activate
+>source .venv/bin/activate
 >```
 
 > Windows
 > ```bash
-> python -m venv env
+> python -m venv .venv
 > ```
 >
 > ```bash
-> .env/Scripts/activate
+> .venv/Scripts/activate
 > ```
 
-Os comandos `python3 -m venv env` e `python -m venv env` serão responsáveis por criar um ambiente virtual do python, ele será representado na estrutura do projeto como uma pasta chamada `env`, que foi o nome digitado no comando. _(podendo ser o nome que você quiser)_
+Os comandos `python3 -m venv .venv` e `python -m venv .venv` serão responsáveis por criar um ambiente virtual do python, ele será representado na estrutura do projeto como uma pasta chamada `.venv`, que foi o nome digitado no comando. _(podendo ser o nome que você quiser)_
 
-Já os comandos `source env/bin/activate` e `.env/Scripts/activate` são utilizados para acessar o seu ambiente virtual do Python, dessa meneira o seu projeto não fica sobrecarregado com bibliotecas que você tenha utilizado em outros projetos.
+Já os comandos `source .venv/bin/activate` e `.venv/Scripts/activate` são utilizados para acessar o seu ambiente virtual do Python no terminal, permitindo que você instale pacotes e rode scripts python de maneira individual do Python que você tem instalado no seu Sistema Operacional.
 
-Após acessar seu ambiente virtual, que pode ser identificado com um `(env)` antes do caminho do seu respositório na linha de comando, basta rodar o código abaixo para instalar todas as bibliotecas que foram utilizadas no projeto
+Após acessar seu ambiente virtual, que pode ser identificado com um `(.venv)` antes do caminho do seu respositório na linha de comando, basta rodar o código abaixo para instalar todas as bibliotecas que foram utilizadas no projeto
 
 ```bash
 pip install -r requirements.txt
@@ -38,72 +38,62 @@ pip install -r requirements.txt
 
 Tendo terminado a instalação você já estará pronto para rodar o **web scraping**, com o comando abaixo:
 
-> Linux e MacOS
-> ```bash
-> python3 app.py
-> ```
-
 > Windows, Linux e MacOS
 > ```bash
-> python app.py
+> uvicorn main:app --reload
 > ```
+
+O parâmetro `--reload` é deve ser utilizado somente para ambiente de desenvolvimento, pois ele reiniciará a API do FastAPI para cada alteração salva nos arquivos deste projeto.
 
 # :neutral_face: Do que se trata?
 
-Este é um projeto pessoal desenvolvido para treinar a prática do **web scraping**, que consiste em coletar de maneira automatizada informações de sites na internet. 
+Este é um projeto pessoal desenvolvido para treinar a prática do **web scraping** e do desenvolvimento de **API's** no framework **FastAPI**. 
 
-Nesse projeto foi realizada a coleta das **Atividades complementares** que estão disponíveis no [site](https://portal.ite.edu.br/atividadescomplementares/atividadesdisponiveis) da minha faculdade, a **Instituição Toledo de Ensino - ITE**.
+Nele foi realizado a coleta das **Atividades complementares** que estão disponíveis no [site](https://portal.ite.edu.br/atividadescomplementares/atividadesdisponiveis) da minha faculdade, a **Instituição Toledo de Ensino - ITE** através da técnica de **web scraping**. 
 
-# :sunglasses: Por que utilizá-la?
+Após os dados serem coletados eles são disponibilizados no formato **`JSON`** com rotas que permitem a filtragem dos dados por **grupo** e **ordenação**.
 
-Ao contrário do que é exibido no site, meu script:
-- Retorna os dados no formato `JSON`
-- Remove campos repetidos da tabela
-- Agrupa campos que não precisavam estar separados
-- Permite filtros (de maneira crescente e decrescente) por:
-  - Grupos
-  - Horas Complementares
-
-
-# :grin: Como o filtro funciona?
-
-Dentro da função **main** você encontrará uma variável chamada **order** que recebe um dicionário, assim como o exibido abaixo:
-
-```python
-order = {'element': 'hours', 'reverse': False}
-```
-
-Com base nessa especificação do dicionário o **scraping** retornará os dados encontrados, exibindo no terminal de maneira crescente, ou seja, da atividade que oferece o menor número de horas complementares para a atividade que oferece o maior número de horas complementares.
-
-Você pode alterar de `hours` para `group`, permitindo que o **scraping** retorne os dados filtrando do **Grupo 1** ao **Grupo 4**.
-
-Mas também é possível alterar o valor do campo `reverse` de `False` para `True`, permitindo que o filtro seja realizado na ordem **Decrescente**, ou seja, do maior para o menor.
-
-# :hushed: Retorno do Scraping
+# :sunglasses: Modelo de retorno
 
 ```json
-[    
-    {
-        "date": "05/08/2023 08:00",
-        "event": "Curso 5S – Housekeeping - Comportamento e base para a Melhoria Contínua e Prática da Qualidade - Botucatu/Online",
-        "professor": "Prof. Dr. Francisco José Lampkowski",
-        "observation": "Público alvo: todos os alunos FAIB e comunidade – Grupo 1: 10 horas – O curso será realizado em dois encontros: 05/08 e 
-12/08/2023",
-        "location": "Botucatu - zoom",
-        "hours": 10,
-        "group": 1
-    },
-    {
-        "date": "01/07/2023 07:00",
-        "event": "Visita Técnica: Feira de Franquias Associação Brasileira de Franquias-ABF",
-        "professor": "Prof. Dr. José Ricardo Scareli Carrijo",
-        "observation": "Público alvo: alunos do curso de Administração do CEUB - Grupo 3: 12h – Os alunos interessados devem procurar o 
-coordenador do curso de Administração Prof. Dr. José Ricardo Scareli Carrijo",
-        "location": "Presencial",
-        "hours": 12,
-        "group": 3
-    }
-]
+{
+    "date": "%d/%m/%Y %H:%M",
+    "event": "str",
+    "professor": "str",
+    "observation": "str",
+    "location": "str",
+    "online": "bool",
+    "hours": "int",
+    "group": "int"
+}
 ```
 
-Como pode ser observado o retorno desse **scraping** é em formato de `array` contendo os objetos `JSON` extraídos do `HTML` da página da faculdade.
+
+# :grin: Rotas da API
+
+Se você observar no arquivo `main.py` verá que só existe uma única rota em nossa API, sendo ela acessada através da URL abaixo:
+
+```text
+http://127.0.0.1:8000/api/activities
+```
+
+No entanto criamos alguns filtros para o retorno dos dados.
+
+- `http://127.0.0.1:8000/api/activities?group={int}`
+- `http://127.0.0.1:8000/api/activities?sorted={asc|desc}`
+
+
+## :bookmark_tabs: group
+
+O parâmetro `group` pode ser utilizado para retornar somente as atividades atribuídas ao grupo especificado. Podendo receber como valor somente números inteiros.
+
+## :bookmark_tabs: sorted
+
+O parâmetro `sorted` pode ser utilizado para retornar os dados de maneira ordenada através da quantidade de horas oferecidas por cada atividade, podendo receber os parâmetros:
+
+ - **asc** => Ordenação `crescente`
+ - **desc** => Ordenação `decrescente`
+
+## :book: Combinações
+
+Os parâmetros `group` e `sorted` podem ser combinados para retornarem informações mais relevantes com base no que você está procurando.
