@@ -1,49 +1,21 @@
-from robyn import Robyn
-from robyn.robyn import Response
-from scraper import main
+from enum import Enum
+from scraping import tools
+from fastapi import FastAPI
 
 
-app = Robyn(__file__)
+class Sorted(str, Enum):
+    asc = 'asc'
+    desc = 'desc'
+
+app = FastAPI()
 
 
-
-@app.get('/api/activities/hours/asc')
-async def activities_hours_asc(request):
-    order = {'elements': 'hours', 'reverse': False}
-    return Response(
-        status_code = 200,
-        headers = {"Content-Type": "application/json; charset=utf-8"}, 
-        body = main(order)
-    )
-
-@app.get('/api/activities/hours/desc')
-async def activities_hours_desc(request):
-    order = {'elements': 'hours', 'reverse': True}
-    return Response(
-        status_code = 200,
-        headers = {"Content-Type": "application/json; charset=utf-8"}, 
-        body = main(order)
-    )
-
-@app.get('/api/activities/group/asc')
-async def activities_group_asc(request):
-    order = {'elements': 'group', 'reverse': False}
-    return Response(
-        status_code = 200,
-        headers = {"Content-Type": "application/json; charset=utf-8"}, 
-        body = main(order)
-    )
-
-@app.get('/api/activities/group/desc')
-async def activities_group_asc(request):
-    order = {'elements': 'group', 'reverse': True}
-    return Response(
-        status_code = 200,
-        headers = {"Content-Type": "application/json; charset=utf-8"}, 
-        body = main(order)
-    )
-
-
-
-if __name__ == '__main__':
-    app.start(url="0.0.0.0", port=5000)
+@app.get('/api/activities')
+async def activities(group: int|None=None, sorted: Sorted|None=None):
+    if sorted:
+        if sorted == Sorted.asc:
+            return tools.return_data(group, False)
+        elif sorted == Sorted.desc:
+            return tools.return_data(group, True)
+    
+    return tools.return_data(group)
