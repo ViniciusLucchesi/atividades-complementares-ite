@@ -1,8 +1,7 @@
 import re
-import json
 
 
-def match_regex(observation:str)-> tuple:
+def return_hours_and_group(observation:str)-> tuple[int, int]:
     """
     Encontra e devolve em formato de tuplas o número do grupo e a quantidade de horas
     que serão contabilizadas com a atividade atual.
@@ -18,11 +17,20 @@ def match_regex(observation:str)-> tuple:
     return (0, 0)
 
 def return_location_and_online(location:str) -> tuple[str, bool]:
+    """
+    Encontra e devolve em formato de tuplas a localização coletada via Scraping e a um
+    boleano que indica se será uma atividade no formato online ou não.
+    """
     match = re.search(r"(zoom)", location.lower())
     if match:
         return (location, True)
     return (location, False)
 
+def format_professor_name(name:str) -> str:
+    match = re.search(r"(\/)", name)
+    if match:
+        return name.upper()
+    return name.title()
 
 def sort_activities(data:list, reverse:bool) -> list:
     """
@@ -35,11 +43,3 @@ def valid_response(status_code:int) -> bool:
     if status_code == 200:
         return True
     return False
- 
-# def success_json(activities:list, order_by:dict) -> json:
-#     sorted_activitie = sort_activities(activities, order_by)
-#     return json.dumps(sorted_activitie, indent=4, ensure_ascii=False)
-
-# def error_json(status_code:int) -> json:
-#     error = {"erro": "A página não foi encontrada", "status_code":status_code}
-#     return json.dumps(error, ensure_ascii=False)
