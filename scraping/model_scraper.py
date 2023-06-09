@@ -25,32 +25,32 @@ class Scraper(BaseModel):
         data = []
         for row in table.css('tr'):
             row_data = [cell.text().strip() for cell in row.css('td')]
-            hours, group = utils.match_regex(row_data[4])
+            hours, group = utils.return_hours_and_group(row_data[4])
             location, online = utils.return_location_and_online(row_data[6])
+            professor = utils.format_professor_name(row_data[3])
 
             if filter:
                 if group == filter:
                     data_dict = {
                         "date": " ".join([row_data[0], row_data[5]]),
                         "event": row_data[2],
-                        "professor": row_data[3],
+                        "professor": professor,
                         "observation": row_data[4],
                         "location": location,
                         "online": online,
                         "hours": hours,
                         "group": group
                     }
-                    data.append(data_dict)
             else:
                 data_dict = {
                     "date": " ".join([row_data[0], row_data[5]]),
                     "event": row_data[2],
-                    "professor": row_data[3],
+                    "professor": professor,
                     "observation": row_data[4],
                     "location": location,
                     "online": online,
                     "hours": hours,
                     "group": group
                 }
-                data.append(data_dict)
+            data.append(data_dict)
         return data    
