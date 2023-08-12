@@ -28,7 +28,7 @@ class Scraper(BaseModel):
         # Se o filtro for menor que 1 ou maior que 4, retorna erro  
         if filter is not None:      
             if filter < 1 or filter > 4:
-                return [{"error": f"O grupo {filter} não existe"}]
+                return [{"error": "O parâmetro (group) deve ser de 1 á 4"}]
 
         table = html.css_first('table#dtBasicExample > tbody')
         data = []

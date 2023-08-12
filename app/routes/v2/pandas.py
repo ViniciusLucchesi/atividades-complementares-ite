@@ -13,9 +13,9 @@ router = APIRouter(
 async def activities(group: int = None):
     if group is not None:
         if group not in range(1, 5):
-            return {'error': 'group must be in range 1-4'}
+            return [{'error': 'O parâmetro (group) deve ser de 1 á 4'}]
     
     data = pandas.get_activities(group)
     if len(data) == 0:
-        return {'error': f'Não há dados para o grupo {group}'}
+        return [{'error': f'Não há atividades para o grupo {group}'}]
     return data
