@@ -1,6 +1,6 @@
 <div align="center">
 
-<div style="background: #054630; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 10px; margin: auto;">
+<div class="img-bg">
   <img src="assets/ite_logo.png" alt="ITE Logo">
 </div>
 
