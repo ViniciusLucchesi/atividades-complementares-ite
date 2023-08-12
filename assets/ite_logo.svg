@@ -1,0 +1,18 @@
+<svg fill="none" viewBox="0 0 100 100" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+    <foreignObject width="100%" height="100%">
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            <style>
+            img {
+                display: flex; 
+                width: 100px; 
+                height: 100px;
+                justify-content: center; 
+                align-items: center; 
+                border-radius: 10px; 
+                background: #054630; 
+            }
+            </style>
+            <img src="assets/ite_logo.png" alt="ITE Logo">
+        </div>
+    </foreignObject>
+</svg>

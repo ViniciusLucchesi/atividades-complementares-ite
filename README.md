@@ -1,7 +1,7 @@
 <div align="center">
 
 <div class="img-bg">
-  <img src="assets/ite_logo.png" alt="ITE Logo">
+  <img src="assets/ite_logo.svg" width="100" height="100" alt="ITE Logo svg">
 </div>
 
 # Atividades Complementares
