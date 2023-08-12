@@ -12,7 +12,7 @@
                 background: #054630; 
             }
             </style>
-            <img src="assets/ite_logo.png" alt="ITE Logo">
+            <img src="assets/ite_logo.png" alt="ITE Logo" />
         </div>
     </foreignObject>
 </svg>
