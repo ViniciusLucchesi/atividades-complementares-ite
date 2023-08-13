@@ -18,8 +18,8 @@ Coletados via `Web Scraping` e disponibilizados no formato `JSON`
 [Versões](#pushpin-versões) &nbsp; • &nbsp; [Rotas](#telescope-rotas) &nbsp; • &nbsp; [Modelos](#book-modelos)
 
 
-<br/>
-<br/>
+<br />
+<br />
 
 </div>
 
@@ -32,14 +32,14 @@ Ambas as versões possuem o mesmo objetivo, mas utilizam métodos diferentes par
 - **Versão 1:** 
   - Realiza o `web scraping` de maneira manual, utilizando as bibliotecas `httpx`, `selectolax`.
   - Faz toda a formatação dos dados também de maneira manual.
-<br/>
+<br />
 
 - **Versão 2:** 
     - Realiza o `web scraping` de maneira automática, utilizando a função `read_html` da biblioteca `pandas`.
     - Faz toda a formatação dos dados utlizando a biblioteca `pandas`.
 
-<br/>
-<br/>
+<br />
+<br />
 
 # :telescope: Rotas
 
@@ -70,33 +70,42 @@ O parâmetro `sorted` pode ser utilizado para retornar os dados de maneira orden
 
 Os parâmetros `group` e `sorted` podem ser combinados para retornarem informações mais relevantes com base no que você está procurando.
 
-<br/>
+<br />
 
 ## :traffic_light: API - V2
 
-```text
-http://127.0.0.1:8000/api/v2/activities
-```
+####  :ledger: GET /activities
 
 ```text
-http://127.0.0.1:8000/api/v2/activities/auth
+http://127.0.0.1:8000/api/v2/activities
 ```
 
 Filtros que podem ser aplicados
 
 - `http://127.0.0.1:8000/api/v2/activities?group={int}`
 
-### :bookmark_tabs: group
+#### :bookmark_tabs: group
 
 O parâmetro `group` pode ser utilizado para retornar somente as atividades atribuídas ao grupo especificado. Podendo receber como valor somente números inteiros entre 1 e 4.
 
-### :bookmark_tabs: sorted
+#### :bookmark_tabs: sorted
 
 Por padrão essa rota já ordena os objetos retornados de maneira `decrescente` com base na quantidade de horas complementares que serão ganhas ao participar da atividade.
 
+####  :ledger: GET /activiteis/auth
 
-<br/>
-<br/>
+```text
+http://127.0.0.1:8000/api/v2/activities/auth
+```
+
+Requisitos:
+
+- usuário ==> R.A.
+- senha ==> senha cadastrada no WIFI
+
+
+<br />
+<br />
 
 # :mailbox: Modelos
 
@@ -152,8 +161,8 @@ Por padrão essa rota já ordena os objetos retornados de maneira `decrescente` 
 ```
 
 
-<br/>
-<br/>
+<br />
+<br />
 
 ## :beginner: Retornos
 
@@ -173,8 +182,8 @@ GET http://127.0.0.1:8000/api/{v1|v2}/activities?group=5
 ]
 ```
 
-<br/>
-<br/>
+<br />
+<br />
 
 ### :negative_squared_cross_mark: Dados não encontrados
 
@@ -192,8 +201,40 @@ GET http://127.0.0.1:8000/api/{v1|v2}/activities?group=4
 ]
 ```
 
-<br/>
-<br/>
+<br />
+<br />
+
+### :negative_squared_cross_mark: Sem autenticação
+
+```text
+GET http://127.0.0.1:8000/api/v2/activities/auth
+```
+
+```json
+{
+  "detail": "Not authenticated"
+}
+```
+
+<br />
+<br />
+
+### :negative_squared_cross_mark: Autenticação inválida
+
+```text
+GET http://127.0.0.1:8000/api/v2/activities/auth
+```
+
+```json
+[
+  {
+    "error": "Matricula ou senha incorretos"
+  }
+]
+```
+
+<br />
+<br />
 
 ### :white_check_mark: Dados encontrados
 
@@ -241,7 +282,7 @@ GET http://127.0.0.1:8000/api/v1/activities?group=1
 ]
 ```
 
-<br/>
+<br />
 
 #### Versão 2
 
@@ -272,7 +313,7 @@ GET http://127.0.0.1:8000/api/v2/activities?group=1
 ]
 ```
 
-<br/>
+<br />
 
 ```text
 GET http://127.0.0.1:8000/api/v2/activities/auth
@@ -294,4 +335,7 @@ auth = {
 ]
 ```
 
-<br/>
+<br />
+
+
+
