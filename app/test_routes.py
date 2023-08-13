@@ -1,3 +1,4 @@
+import os
 from fastapi.testclient import TestClient
 import pytest
 from .main import app
@@ -65,13 +66,16 @@ def test_v2_activities_auth_doesnt_pass_parameters():
 
 @pytest.mark.v2
 def test_v2_activities_auth_error_message():
-    response = client.get("/api/v2/activities/auth", auth=("010620005", "123456"))
+    response = client.get("/api/v2/activities/auth", auth=("123456", "123456"))
     assert response.status_code == 200
     assert response.json() == [{"error": "Matricula ou senha incorretos"}]
 
 @pytest.mark.v2
 def test_v2_activities_auth_return_values():
-    response = client.get("/api/v2/activities/auth", auth=("010620005", "7946852"))	    
+    AUTH_MATRICULA = os.getenv("AUTH_MATRICULA")
+    AUTH_PASSWORD = os.getenv("AUTH_PASSWORD")
+
+    response = client.get("/api/v2/activities/auth", auth=(AUTH_MATRICULA, AUTH_PASSWORD))
     assert response.status_code == 200
     assert response.json() != [{"error": "Matricula ou senha incorretos"}]
     assert isinstance(response.json(), list)
