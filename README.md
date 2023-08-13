@@ -1,14 +1,14 @@
 <div align="center">
 
-<div class="img-bg">
-  <img src="assets/ite_logo.svg" width="100" height="100" alt="ITE Logo svg">
+<div>
+  <img src="assets/ite_logo.svg" width="100" height="100" alt="ITE Logo svg">  
 </div>
 
 # Atividades Complementares
 
 ![programming_language](https://img.shields.io/badge/python-3.10.12-informational) &nbsp;
 ![fastapi](https://img.shields.io/badge/fastapi-0.100.0-success) &nbsp;
-![test](https://img.shields.io/badge/Test_coverage-100%-success)
+![test](https://img.shields.io/badge/test_coverage-100-success)
 
 API que coleta e disponibiliza informações sobre as atividades complementares da faculdade. 
 
@@ -16,6 +16,7 @@ Coletados via `Web Scraping` e disponibilizados no formato `JSON`
 
 
 [Versões](#pushpin-versões) &nbsp; • &nbsp; [Rotas](#telescope-rotas) &nbsp; • &nbsp; [Modelos](#book-modelos)
+
 
 <br/>
 <br/>
