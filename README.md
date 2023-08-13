@@ -6,9 +6,9 @@
 
 # Atividades Complementares
 
-![programming_language](https://img.shields.io/badge/python-3.10.12-yellow) &nbsp;
+![programming_language](https://img.shields.io/badge/python-3.10.12-informational) &nbsp;
 ![fastapi](https://img.shields.io/badge/fastapi-0.100.0-success) &nbsp;
-![pandas](https://img.shields.io/badge/pandas-2.0.3-blue)
+![test](https://img.shields.io/badge/Test_coverage-100%-success)
 
 API que coleta e disponibiliza informações sobre as atividades complementares da faculdade. 
 
@@ -77,6 +77,10 @@ Os parâmetros `group` e `sorted` podem ser combinados para retornarem informaç
 http://127.0.0.1:8000/api/v2/activities
 ```
 
+```text
+http://127.0.0.1:8000/api/v2/activities/auth
+```
+
 Filtros que podem ser aplicados
 
 - `http://127.0.0.1:8000/api/v2/activities?group={int}`
@@ -97,6 +101,8 @@ Por padrão essa rota já ordena os objetos retornados de maneira `decrescente` 
 
 ## :ticket: Modelo de retorno - V1
 
+**GET - /activities**
+
 ```json
 [
     {
@@ -114,6 +120,9 @@ Por padrão essa rota já ordena os objetos retornados de maneira `decrescente` 
 
 ## :ticket: Modelo de retorno - V2
 
+
+**GET - /activities**
+
 ```json
 [
     {
@@ -125,6 +134,19 @@ Por padrão essa rota já ordena os objetos retornados de maneira `decrescente` 
         "group": 0,
         "hours": 0
     }
+]
+```
+
+**GET - /activities/auth**
+
+```json
+[  
+  {
+    "group": 0,
+    "event": "str",
+    "event_url": "str",
+    "remaining_vacancies": 0
+  }
 ]
 ```
 
@@ -245,6 +267,28 @@ GET http://127.0.0.1:8000/api/v2/activities?group=1
     "city": "Bauru/Botucatu",
     "group": 1,
     "hours": 4
+  }
+]
+```
+
+<br/>
+
+```text
+GET http://127.0.0.1:8000/api/v2/activities/auth
+
+auth = {
+  "username": "<seu_RA>"
+  "password": "<sua_senha>"
+}
+```
+
+```json
+[  
+  {
+    "group": 3,
+    "event": "Palestra: Perícia para Administradores - Bauru/Online",
+    "event_url": "https://portal.ite.edu.br/atividadescomplementares/eventos?atividade=NAC2023%2095",
+    "remaining_vacancies": 139
   }
 ]
 ```
