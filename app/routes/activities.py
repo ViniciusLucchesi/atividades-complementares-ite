@@ -5,8 +5,8 @@ from app.scraping import activities, auth_activities
 
 
 router = APIRouter(
-    prefix='/api/v1',
-    tags=['v1']
+    prefix='/api/v2',
+    tags=['v2']
 )
 
 security = HTTPBasic()
