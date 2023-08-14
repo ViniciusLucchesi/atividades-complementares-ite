@@ -1,9 +1,5 @@
 <div align="center">
 
-<div>
-  <img src="assets/ite_logo.svg" width="100" height="100" alt="ITE Logo svg">  
-</div>
-
 # Atividades Complementares
 
 ![programming_language](https://img.shields.io/badge/python-3.10.12-informational) &nbsp;
@@ -15,7 +11,7 @@ API que coleta e disponibiliza informações sobre as atividades complementares 
 Coletados via `Web Scraping` e disponibilizados no formato `JSON`
 
 
-[Versões](#pushpin-versões) &nbsp; • &nbsp; [Rotas](#telescope-rotas) &nbsp; • &nbsp; [Modelos](#book-modelos)
+[Rotas](#telescope-rotas) &nbsp; • &nbsp; [Modelos](#book-modelos)
 
 
 <br />
@@ -23,58 +19,9 @@ Coletados via `Web Scraping` e disponibilizados no formato `JSON`
 
 </div>
 
-# :pushpin: Versões
-
-Ambas as versões possuem o mesmo objetivo, mas utilizam métodos diferentes para alcaça-lo.
-
-## Métodos
-
-- **Versão 1:** 
-  - Realiza o `web scraping` de maneira manual, utilizando as bibliotecas `httpx`, `selectolax`.
-  - Faz toda a formatação dos dados também de maneira manual.
-<br />
-
-- **Versão 2:** 
-    - Realiza o `web scraping` de maneira automática, utilizando a função `read_html` da biblioteca `pandas`.
-    - Faz toda a formatação dos dados utlizando a biblioteca `pandas`.
-
-<br />
-<br />
-
 # :telescope: Rotas
 
-## :traffic_light: API - V1
-
-```text
-http://127.0.0.1:8000/api/v1/activities
-```
-
-Filtros que podem ser aplicados:
-
-- `http://127.0.0.1:8000/api/v1/activities?group={int}`
-- `http://127.0.0.1:8000/api/v1/activities?sorted={asc|desc}`
-
-
-### :bookmark_tabs: group
-
-O parâmetro `group` pode ser utilizado para retornar somente as atividades atribuídas ao grupo especificado. Podendo receber como valor somente números inteiros entre 1 e 4.
-
-### :bookmark_tabs: sorted
-
-O parâmetro `sorted` pode ser utilizado para retornar os dados de maneira ordenada através da quantidade de horas oferecidas por cada atividade, podendo receber os parâmetros:
-
- - **asc** => Ordenação `crescente`
- - **desc** => Ordenação `decrescente`
-
-## :book: Combinações
-
-Os parâmetros `group` e `sorted` podem ser combinados para retornarem informações mais relevantes com base no que você está procurando.
-
-<br />
-
-## :traffic_light: API - V2
-
-####  :ledger: GET /activities
+###  :ledger: GET /activities
 
 ```text
 http://127.0.0.1:8000/api/v2/activities
@@ -92,7 +39,9 @@ O parâmetro `group` pode ser utilizado para retornar somente as atividades atri
 
 Por padrão essa rota já ordena os objetos retornados de maneira `decrescente` com base na quantidade de horas complementares que serão ganhas ao participar da atividade.
 
-####  :ledger: GET /activiteis/auth
+<br />
+
+### :ledger: GET /activiteis/auth
 
 ```text
 http://127.0.0.1:8000/api/v2/activities/auth
@@ -100,36 +49,14 @@ http://127.0.0.1:8000/api/v2/activities/auth
 
 Requisitos:
 
-- usuário ==> R.A.
-- senha ==> senha cadastrada no WIFI
+- usuário
+- senha
 
 
 <br />
 <br />
 
 # :mailbox: Modelos
-
-## :ticket: Modelo de retorno - V1
-
-**GET - /activities**
-
-```json
-[
-    {
-        "date": "%d/%m/%Y %H:%M",
-        "event": "str",
-        "professor": "str",
-        "observation": "str",
-        "location": "str",
-        "online": true,
-        "hours": 0,
-        "group": 0
-    }
-]
-```
-
-## :ticket: Modelo de retorno - V2
-
 
 **GET - /activities**
 
@@ -171,7 +98,7 @@ Requisitos:
 Se o usuário utilizar o filtro para buscar um grupo específico, mas o número passado como parâmetro for diferente dos valores de 1 a 4, será retornado o seguinte `json`:
 
 ```text
-GET http://127.0.0.1:8000/api/{v1|v2}/activities?group=5
+GET http://127.0.0.1:8000/api/v2/activities?group=5
 ```
 
 ```json
@@ -190,7 +117,7 @@ GET http://127.0.0.1:8000/api/{v1|v2}/activities?group=5
 Se o grupo pesquisado estiver dentro dos valores permitidos, mas nenhuma dado for encontrado, será retornado uma mensagem infromando o ocorrido.
 
 ```text
-GET http://127.0.0.1:8000/api/{v1|v2}/activities?group=4
+GET http://127.0.0.1:8000/api/v2/activities?group=4
 ```
 
 ```json
@@ -239,52 +166,6 @@ GET http://127.0.0.1:8000/api/v2/activities/auth
 ### :white_check_mark: Dados encontrados
 
 Se o filtro estiver correto e os dados existirem, eles serão retornados no formato abaixo:
-
-
-#### Versão 1
-
-```text
-GET http://127.0.0.1:8000/api/v1/activities?group=1
-```
-
-```json
-[
-  {
-    "date": "21/10/2023 08:00",
-    "event": "Curso: Entendendo os demonstrativos contábeis - Bauru/Presencial",
-    "professor": "Prof. Esp. Osvaldo Luis Gonçalves Da Cunha",
-    "observation": "Público alvo: todos os alunos do CEUB e comunidade - Grupo 1: 4h",
-    "location": "Sala 203 bloco 5",
-    "online": false,
-    "hours": 4,
-    "group": 1
-  },
-  {
-    "date": "21/10/2023 08:00",
-    "event": "Curso: Entendendo os demonstrativos contábeis - Bauru/Online",
-    "professor": "Prof. Esp. Osvaldo Luis Gonçalves Da Cunha",
-    "observation": "Público alvo: todos os alunos do CEUB e comunidade - Grupo 1: 4h - ; O Acesso remoto à sala de aula deve ser feito utilizando o NOME COMPLETO e RA.",
-    "location": "Bauru - zoom",
-    "online": true,
-    "hours": 4,
-    "group": 1
-  },
-  {
-    "date": "21/10/2023 08:00",
-    "event": "Curso: Entendendo os demonstrativos contábeis - Botucatu/Online",
-    "professor": "Prof. Esp. Osvaldo Luis Gonçalves Da Cunha",
-    "observation": "Público alvo: todos os alunos FAIB e comunidade - Grupo 1: 4h - ; O Acesso remoto à sala de aula deve ser feito utilizando o NOME COMPLETO e RA.",
-    "location": "Botucatu - zoom",
-    "online": true,
-    "hours": 4,
-    "group": 1
-  }
-]
-```
-
-<br />
-
-#### Versão 2
 
 ```text
 GET http://127.0.0.1:8000/api/v2/activities?group=1
