@@ -25,7 +25,7 @@ async def get_activities(group: int = None):
     return data
 
 
-@router.get('/activities/auth')
+@router.get('/activities/registrations')
 async def get_activity_link(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
     payload = {
         "matricula": credentials.dict()['username'],
