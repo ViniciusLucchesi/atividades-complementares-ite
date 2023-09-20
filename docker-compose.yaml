@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    container_name: FastAPI-ITE
+    environment:
+      - PYTHONPATH=/app
+    entrypoint: 
+      - uvicorn
+      - app.main:app
+      - --host
+      - '0.0.0.0'
+      - --port
+      - '7000'
+      - --reload
+    ports:
+      - 7000:7000
+    depends_on:
+      - surrealdb
+  
+  surrealdb:
+    image: surrealdb/surrealdb:1.0.0
+    container_name: Surrealdb-1.0
+    user: root
+    env_file:
+      - .env
+    entrypoint: 
+      - /surreal
+      - start
+      - --auth
+      - --user
+      - $DB_USER
+      - --pass
+      - $DB_PASS
+      - --bind
+      - 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    volumes:
+      - surrealdb:/data
+
+volumes:
+  surrealdb:
