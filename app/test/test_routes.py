@@ -8,6 +8,10 @@ from dotenv import load_dotenv
 load_dotenv()
 client = TestClient(app)
 
+AUTH_MATRICULA = os.getenv("AUTH_MATRICULA")
+AUTH_PASSWORD = os.getenv("AUTH_PASSWORD")
+
+
 
 # v2 - /activities
 @pytest.mark.v2
@@ -49,9 +53,6 @@ def test_v2_activities_auth_error_message():
 
 @pytest.mark.v2
 def test_v2_activities_auth_return_values():
-    AUTH_MATRICULA = os.getenv("AUTH_MATRICULA")
-    AUTH_PASSWORD = os.getenv("AUTH_PASSWORD")
-
     response = client.get("/api/v2/activities/auth", auth=(AUTH_MATRICULA, AUTH_PASSWORD))
     assert response.status_code == 200
     assert response.json() != [{"error": "Matricula ou senha incorretos"}]
